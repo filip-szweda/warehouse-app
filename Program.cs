@@ -10,6 +10,7 @@ namespace entity_framework
         {
             _dbContext = new AppDbContext();
             _itemWarehouse = new ItemWarehouse(_dbContext);
+            WarehouseInitializer.Initialize(_dbContext);
 
             var quit = false;
             while (!quit)

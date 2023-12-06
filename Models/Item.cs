@@ -16,6 +16,8 @@ namespace entity_framework.Models
         public double Price { get; set; }
         public int Stock { get; set; }
 
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
         public override string ToString()
         {
             return $"{Name} - [Price]: {Price:0.00}$, [Stock]: {Stock}";
