@@ -5,7 +5,7 @@
 namespace entity_framework.Migrations
 {
     /// <inheritdoc />
-    public partial class warehousedb : Migration
+    public partial class warehouse : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

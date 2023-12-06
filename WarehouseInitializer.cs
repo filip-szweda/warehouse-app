@@ -45,26 +45,6 @@ namespace entity_framework
                 context.Clients.AddRange(eClients);
                 context.SaveChanges();
             }
-
-            /*if (!context.Orders.Any())
-            {
-                var orderFaker = new Faker<Order>()
-                    .RuleFor(o => o.Client, f => f.PickRandom(context.Clients.ToList()))
-                    .RuleFor(o => o.Completed, f => f.Random.Bool());
-
-                var eClients = context.Clients.ToList().OfType<EClient>().ToList();
-                var eOrderFaker = new Faker<EOrder>()
-                    .RuleFor(o => o.Client, f => f.PickRandom(eClients))
-                    .RuleFor(o => o.Completed, f => f.Random.Bool())
-                    .RuleFor(o => o.IPAddress, f => f.Internet.Ip());
-
-                var orders = orderFaker.Generate(100);
-                var eOrders = eOrderFaker.Generate(100);
-
-                context.Orders.AddRange(orders);
-                context.Orders.AddRange(eOrders);
-                context.SaveChanges();
-            }*/
         }
     }
 }

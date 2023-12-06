@@ -27,7 +27,7 @@ namespace entity_framework.Models
 
         public override string ToString()
         {
-            string text = $"Order [Id]: {Id}, [Completed]: {Completed}, [IsEOrder]: {this.IsEOrder()}";
+            string text = $"Order [Id]: {Id}, [Completed]: {Completed}, [IsEOrder]: {IsEOrder()}, [Client]: {Client}";
             foreach (var item in OrderItems)
             {
                 text += "\n\t\t" + item.ToString();

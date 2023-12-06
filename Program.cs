@@ -210,6 +210,14 @@ namespace entity_framework
             var currentPage = 0;
 
             var orders = _dbContext.Orders.ToList();
+            if (orders == null)
+            {
+                Console.WriteLine("[ERROR] There are currently no Orders");
+                Console.WriteLine("[INFO] Press Enter to Continue");
+                Console.ReadLine();
+                return;
+            }
+
             var ordersDict = new Dictionary<int, List<Order>>();
             for (int i = 0; i < orders.Count; i++)
             {
