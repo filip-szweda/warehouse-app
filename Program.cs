@@ -15,17 +15,21 @@ namespace entity_framework
             while (!quit)
             {
                 Console.WriteLine("<<< warehouse_client >>>");
-                Console.WriteLine("0. Add New Item");
-                Console.WriteLine("1. Increase Item Stock");
+                Console.WriteLine("0. Show Items");
+                Console.WriteLine("1. Add New Item");
+                Console.WriteLine("2. Increase Item Stock");
                 Console.WriteLine("3. Quit");
 
                 var option = Console.ReadLine();
                 switch (option)
                 {
                     case "0":
-                        AddNewItemToWarehouse();
+                        ShowItemsInWarehouse();
                         break;
                     case "1":
+                        AddNewItemToWarehouse();
+                        break;
+                    case "2":
                         IncreaseItemStockInWarehouse();
                         break;
                     case "3":
@@ -35,6 +39,15 @@ namespace entity_framework
                         Console.WriteLine("[ERROR] Invalid option, choose option 0, 1, 2 or 3.");
                         break;
                 }
+            }
+        }
+
+        private static void ShowItemsInWarehouse()
+        {
+            var items = _dbContext.Items.ToList();
+            foreach (var item in items)
+            {
+                Console.WriteLine(item);
             }
         }
 
