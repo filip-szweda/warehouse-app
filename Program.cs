@@ -18,25 +18,26 @@ namespace entity_framework
             {
                 Console.Clear();
 
-                Console.WriteLine("<<< warehouse_client >>>");
+                Console.WriteLine("<<< Warehouse >>>");
                 Console.WriteLine("0. Show Items");
                 Console.WriteLine("1. Add New Item");
                 Console.WriteLine("2. Increase Item Stock");
                 Console.WriteLine("3. Quit");
                 Console.WriteLine("4. Choose Active Client");
                 Console.WriteLine("5. Add New Order");
+                Console.WriteLine("6. Show Orders");
 
                 var option = Console.ReadLine();
                 switch (option)
                 {
                     case "0":
-                        ShowItemsInWarehouse();
+                        ShowItems();
                         break;
                     case "1":
-                        AddNewItemToWarehouse();
+                        AddNewItem();
                         break;
                     case "2":
-                        IncreaseItemStockInWarehouse();
+                        IncreaseItemStock();
                         break;
                     case "3":
                         quit = true;
@@ -47,6 +48,9 @@ namespace entity_framework
                     case "5":
                         AddNewOrder();
                         break;
+                    case "6":
+                        ShowOrders();
+                        break;
                     default:
                         Console.WriteLine("[ERROR] Invalid option, choose option 0, 1, 2 or 3.");
                         break;
@@ -54,7 +58,7 @@ namespace entity_framework
             }
         }
 
-        private static void ShowItemsInWarehouse()
+        private static void ShowItems()
         {
             Console.Clear();
 
@@ -67,7 +71,7 @@ namespace entity_framework
             Console.ReadLine();
         }
 
-        private static void AddNewItemToWarehouse()
+        private static void AddNewItem()
         {
             Console.Clear();
 
@@ -90,7 +94,7 @@ namespace entity_framework
             _itemWarehouse.AddNewItem(item);
         }
 
-        private static void IncreaseItemStockInWarehouse()
+        private static void IncreaseItemStock()
         {
             Console.Clear();
 
@@ -184,6 +188,85 @@ namespace entity_framework
                     return;
                 }
             }
+        }
+
+        private static void ShowOrders()
+        {
+            var currentPage = 0;
+
+            var orders = _dbContext.Orders.ToList();
+            var ordersDict = new Dictionary<int, List<Order>>();
+            for (int i = 0; i < orders.Count; i++)
+            {
+                var key = i / 5;
+                if (!ordersDict.ContainsKey(key))
+                {
+                    ordersDict[key] = new List<Order>();
+                }
+                ordersDict[key].Add(orders[i]);
+            }
+
+            while (true)
+            {
+                Console.Clear();
+
+                Console.WriteLine($"[INFO] Page no. {currentPage}");
+                foreach (var order in ordersDict[currentPage])
+                {
+                    Console.WriteLine($"\t{order}");
+                }
+
+                bool validInput = false;
+                while (!validInput)
+                {
+                    Console.WriteLine("[INFO] n - next page, p - previous page, q - quit, <index> - accept Order");
+
+                    var input = Console.ReadLine();
+                    if (int.TryParse(input, out var index))
+                    {
+                        if (index < 0 || index >= 5)
+                        {
+                            Console.WriteLine("[ERROR] Invalid index, choose index between 0 and 5");
+                            continue;
+                        }
+
+                        AcceptOrder(ordersDict[currentPage][index]);
+                        validInput = true;
+                    }
+                    else if (input == "n")
+                    {
+                        if (currentPage == ordersDict.Count - 1)
+                        {
+                            Console.WriteLine("[ERROR] You are on the last page");
+                            continue;
+                        }
+
+                        currentPage++;
+                        validInput = true;
+                    }
+                    else if (input == "p")
+                    {
+                        if (currentPage == 0)
+                        {
+                            Console.WriteLine("[ERROR] You are on the first page");
+                            continue;
+                        }
+
+                        currentPage--;
+                        validInput = true;
+                    }
+                    else if (input == "q")
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        private static void AcceptOrder(Order order)
+        {
+            order.Completed = true;
+            _dbContext.SaveChanges();
         }
     }
 }

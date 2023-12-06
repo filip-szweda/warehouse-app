@@ -24,5 +24,15 @@ namespace entity_framework.Models
         {
             return OrderItems.Sum(item => item.Quantity);
         }
+
+        public override string ToString()
+        {
+            string text = $"Order Id {Id}";
+            foreach (var item in OrderItems)
+            {
+                text += "\t" + item.ToString() + "\n";
+            }
+            return text;
+        }
     }
 }
