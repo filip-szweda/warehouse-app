@@ -5,7 +5,7 @@
 namespace entity_framework.Migrations
 {
     /// <inheritdoc />
-    public partial class warehouse : Migration
+    public partial class warehousedb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,7 +46,9 @@ namespace entity_framework.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ClientId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Completed = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Completed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
+                    IPAddress = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,13 +65,15 @@ namespace entity_framework.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     ItemId = table.Column<int>(type: "INTEGER", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.OrderId);
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
                     table.ForeignKey(
                         name: "FK_OrderItems_Items_ItemId",
                         column: x => x.ItemId,
@@ -88,6 +92,11 @@ namespace entity_framework.Migrations
                 name: "IX_OrderItems_ItemId",
                 table: "OrderItems",
                 column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",

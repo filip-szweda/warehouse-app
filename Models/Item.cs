@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace entity_framework.Models
 {
-    internal class Item
+    public class Item
     {
         [Key]
         public int Id { get; set; }

@@ -10,8 +10,8 @@ using entity_framework;
 namespace entity_framework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231206175321_warehouse")]
-    partial class warehouse
+    [Migration("20231206181658_warehouse.db")]
+    partial class warehousedb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,29 +71,54 @@ namespace entity_framework.Migrations
                     b.Property<bool>("Completed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
                     b.ToTable("Orders");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Order");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("entity_framework.Models.OrderItem", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ItemId");
 
+                    b.HasIndex("OrderId");
+
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("entity_framework.Models.EOrder", b =>
+                {
+                    b.HasBaseType("entity_framework.Models.Order");
+
+                    b.Property<string>("IPAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("EOrder");
                 });
 
             modelBuilder.Entity("entity_framework.Models.Order", b =>

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace entity_framework.Models
 {
-    internal class OrderItem
+    public class OrderItem
     {
         [Key]
+        public int Id { get; set; }
         public int OrderId { get; set; }
         public Order Order { get; set; }
 

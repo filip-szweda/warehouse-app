@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace entity_framework.Models
 {
-    internal class Client
+    public class Client
     {
         [Key]
         public int Id { get; set; }

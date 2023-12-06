@@ -3,16 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace entity_framework
 {
-    internal class AppDbContext: DbContext
+    public class AppDbContext: DbContext
     {
         public DbSet<Item> Items { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<EOrder> EOrders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -36,6 +38,9 @@ namespace entity_framework
                 .HasMany(c => c.Orders)
                 .WithOne(o => o.Client)
                 .HasForeignKey(o => o.ClientId);
+
+            builder.Entity<EOrder>()
+                .HasBaseType<Order>();
         }
     }
 }

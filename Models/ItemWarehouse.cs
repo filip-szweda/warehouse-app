@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace entity_framework.Models
 {
-    internal class ItemWarehouse
+    public class ItemWarehouse
     {
         private readonly AppDbContext _dbContext;
 

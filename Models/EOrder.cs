@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace entity_framework.Models
 {
-    internal class EOrder : Order
+    public class EOrder : Order
     {
         public string IPAddress { get; set; }
 

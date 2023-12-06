@@ -167,7 +167,6 @@ namespace entity_framework
                 Client = _activeClient,
                 Completed = false
             };
-            _dbContext.Orders.Add(order);
 
             while (true)
             {
@@ -195,7 +194,7 @@ namespace entity_framework
                     Quantity = itemQuantity
                 };
                 order.OrderItems.Add(orderItem);
-                _dbContext.OrderItems.Add(orderItem);
+                // _dbContext.OrderItems.Add(orderItem);
 
                 var input = "";
                 while(input != "y" && input != "n")
