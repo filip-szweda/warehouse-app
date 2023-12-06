@@ -16,6 +16,8 @@ namespace entity_framework
             var quit = false;
             while (!quit)
             {
+                Console.Clear();
+
                 Console.WriteLine("<<< warehouse_client >>>");
                 Console.WriteLine("0. Show Items");
                 Console.WriteLine("1. Add New Item");
@@ -50,22 +52,26 @@ namespace entity_framework
 
         private static void ShowItemsInWarehouse()
         {
+            Console.Clear();
+
             var items = _dbContext.Items.ToList();
             foreach (var item in items)
             {
-                Console.WriteLine(item);
+                Console.WriteLine($"\t{item}");
             }
         }
 
         private static void AddNewItemToWarehouse()
         {
-            Console.WriteLine("Enter Item name: ");
+            Console.Clear();
+
+            Console.WriteLine("[INFO] Enter Item name: ");
             var itemName = Console.ReadLine();
 
-            Console.WriteLine("Enter Item price: ");
+            Console.WriteLine("[INFO] Enter Item price: ");
             var itemPrice = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("Enter Item stock: ");
+            Console.WriteLine("[INFO] Enter Item stock: ");
             var itemStock = int.Parse(Console.ReadLine());
 
             var item = new Item
@@ -80,10 +86,12 @@ namespace entity_framework
 
         private static void IncreaseItemStockInWarehouse()
         {
-            Console.WriteLine("Enter Item name: ");
+            Console.Clear();
+
+            Console.WriteLine("[INFO] Enter Item name: ");
             var itemName = Console.ReadLine();
 
-            Console.WriteLine("Enter Item stock: ");
+            Console.WriteLine("[INFO] Enter Item stock: ");
             var itemStock = int.Parse(Console.ReadLine());
 
             _itemWarehouse.IncreaseItemStock(itemName, itemStock);
@@ -94,6 +102,8 @@ namespace entity_framework
             string phrase = "";
             while (true)
             {
+                Console.Clear();
+
                 var clients = _dbContext.Clients.ToList();
                 if (phrase != "")
                 {
@@ -102,9 +112,9 @@ namespace entity_framework
                 
                 foreach (var client in clients)
                 {
-                    Console.WriteLine(client);
+                    Console.WriteLine($"\t{client}");
                 }
-                Console.WriteLine("Enter Client index to choose Active Client or enter phrase to filter");
+                Console.WriteLine("[INFO] Enter Client index to choose Active Client or enter phrase to filter");
 
                 var input = Console.ReadLine();
                 if (int.TryParse(input, out var index))
