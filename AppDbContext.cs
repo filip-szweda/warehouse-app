@@ -13,7 +13,6 @@ namespace entity_framework
         public DbSet<Item> Items { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<EOrder> EOrders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

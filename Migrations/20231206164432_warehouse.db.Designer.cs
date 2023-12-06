@@ -10,7 +10,7 @@ using entity_framework;
 namespace entity_framework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231206123214_warehouse.db")]
+    [Migration("20231206164432_warehouse.db")]
     partial class warehousedb
     {
         /// <inheritdoc />
