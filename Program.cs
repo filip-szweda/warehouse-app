@@ -311,9 +311,10 @@ namespace entity_framework
             }
 
             var orders = _dbContext.Orders.Where(o => o.OrderItems.Any(oi => oi.ItemId == item.Id)).ToList();
-            foreach (var order in orders)
+            var clientNames = orders.Select(o => o.Client.Name).Distinct().ToList();
+            foreach (var clientName in clientNames)
             {
-                Console.WriteLine($"\t{order}");
+                Console.WriteLine($"\t{clientName}");
             }
 
             Console.WriteLine("[INFO] Press Enter to Continue");
