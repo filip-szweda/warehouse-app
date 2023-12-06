@@ -20,28 +20,22 @@ namespace entity_framework
             optionsBuilder.UseSqlite("Data Source=warehouse.db");
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<OrderItem>()
-                .HasKey(oi => new { oi.OrderId, oi.ItemId });
-
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Order)
-                .WithMany(o => o.OrderItems)
-                .HasForeignKey(oi => oi.OrderId);
-
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Item)
-                .WithMany(i => i.OrderItems)
+            builder.Entity<Item>()
+                .HasMany(i => i.OrderItems)
+                .WithOne(oi => oi.Item)
                 .HasForeignKey(oi => oi.ItemId);
 
-            modelBuilder.Entity<Client>()
+            builder.Entity<Order>()
+                .HasMany(o => o.OrderItems)
+                .WithOne(oi => oi.Order)
+                .HasForeignKey(oi => oi.OrderId);
+
+            builder.Entity<Client>()
                 .HasMany(c => c.Orders)
                 .WithOne(o => o.Client)
                 .HasForeignKey(o => o.ClientId);
-
-            modelBuilder.Entity<EOrder>()
-                .HasBaseType<Order>();
         }
     }
 }

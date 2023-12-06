@@ -68,19 +68,11 @@ namespace entity_framework.Migrations
                     b.Property<bool>("Completed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
                     b.ToTable("Orders");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Order");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("entity_framework.Models.OrderItem", b =>
@@ -94,22 +86,11 @@ namespace entity_framework.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("OrderId", "ItemId");
+                    b.HasKey("OrderId");
 
                     b.HasIndex("ItemId");
 
                     b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("entity_framework.Models.EOrder", b =>
-                {
-                    b.HasBaseType("entity_framework.Models.Order");
-
-                    b.Property<string>("IPAddress")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasDiscriminator().HasValue("EOrder");
                 });
 
             modelBuilder.Entity("entity_framework.Models.Order", b =>
