@@ -17,9 +17,21 @@ namespace entity_framework.Models
 
         public string Address { get; set; }
 
+        public virtual ICollection<Order> Orders { get; set; }
+
+        public double AmountSpent()
+        {
+            return Orders.Where(o => o.Completed).Sum(o => o.TotalPrice());
+        }
+
         public override string ToString()
         {
             return $"{Name} - [Address]: {Address}";
+        }
+
+        public bool IsEClient()
+        {
+            return this is EClient;
         }
     }
 }
