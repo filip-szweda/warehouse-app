@@ -24,15 +24,18 @@ namespace entity_framework
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Item>()
-                .HasMany(i => i.OrderItems)
-                .WithOne(oi => oi.Item)
-                .HasForeignKey(oi => oi.ItemId);
+            builder.Entity<OrderItem>()
+                .HasKey(oi => new { oi.OrderId, oi.ItemId });
 
-            builder.Entity<Order>()
-                .HasMany(o => o.OrderItems)
-                .WithOne(oi => oi.Order)
+            builder.Entity<OrderItem>()
+                .HasOne(oi => oi.Order)
+                .WithMany(o => o.OrderItems)
                 .HasForeignKey(oi => oi.OrderId);
+
+            builder.Entity<OrderItem>()
+                .HasOne(oi => oi.Item)
+                .WithMany(i => i.OrderItems)
+                .HasForeignKey(oi => oi.ItemId);
 
             builder.Entity<Client>()
                 .HasMany(c => c.Orders)
