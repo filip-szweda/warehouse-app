@@ -24,6 +24,7 @@ namespace entity_framework
                 Console.WriteLine("2. Increase Item Stock");
                 Console.WriteLine("3. Quit");
                 Console.WriteLine("4. Choose Active Client");
+                Console.WriteLine("5. Add New Order");
 
                 var option = Console.ReadLine();
                 switch (option)
@@ -43,6 +44,9 @@ namespace entity_framework
                     case "4":
                         _activeClient = ChooseActiveClient();
                         break;
+                    case "5":
+                        AddNewOrder();
+                        break;
                     default:
                         Console.WriteLine("[ERROR] Invalid option, choose option 0, 1, 2 or 3.");
                         break;
@@ -59,6 +63,8 @@ namespace entity_framework
             {
                 Console.WriteLine($"\t{item}");
             }
+
+            Console.ReadLine();
         }
 
         private static void AddNewItemToWarehouse()
@@ -129,6 +135,53 @@ namespace entity_framework
                 else
                 {
                     phrase = input;
+                }
+            }
+        }
+
+        private static void AddNewOrder()
+        {
+            var order = new Order
+            {
+                Client = _activeClient,
+                Completed = false
+            };
+
+            while (true)
+            {
+                Console.Clear();
+
+                Console.WriteLine("[INFO] Enter Item name: ");
+                var itemName = Console.ReadLine();
+
+                var item = _dbContext.Items.FirstOrDefault(i => i.Name == itemName);
+                if (item == null)
+                {
+                    Console.WriteLine("[ERROR] Item with name {0} does not exist", itemName);
+                    return;
+                }
+
+                Console.WriteLine("[INFO] Enter Item quantity: ");
+                var itemQuantity = int.Parse(Console.ReadLine());
+
+                var orderItem = new OrderItem
+                {
+                    Item = item,
+                    Quantity = itemQuantity
+                };
+                order.OrderItems.Add(orderItem);
+                _dbContext.SaveChanges();
+
+                var input = "";
+                while(input != "y" && input != "n")
+                {
+                    Console.WriteLine("[INFO] Finish Order? (y/n)");
+                    input = Console.ReadLine();
+                }
+                
+                if (input == "n")
+                {
+                    return;
                 }
             }
         }
