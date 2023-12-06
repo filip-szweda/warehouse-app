@@ -27,12 +27,18 @@ namespace entity_framework.Models
 
         public override string ToString()
         {
-            string text = $"Order Id {Id}";
+            string text = $"Order [Id]: {Id}, [Completed]: {Completed}, [IsEOrder]: {this.IsEOrder()}";
             foreach (var item in OrderItems)
             {
-                text += "\t" + item.ToString() + "\n";
+                text += "\n\t\t" + item.ToString();
             }
+            text += $"\n\t\t[AmountOfItems]: {AmountOfItems()}, [Total]: {TotalPrice().ToString("0.00")}";
             return text;
+        }
+
+        public bool IsEOrder()
+        {
+            return this is EOrder;
         }
     }
 }

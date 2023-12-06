@@ -6,7 +6,7 @@ namespace entity_framework
     {
         private static AppDbContext _dbContext;
         private static ItemWarehouse _itemWarehouse;
-        private static Client _activeClient;
+        private static Client _activeClient = null;
         private static void Main(string[] args)
         {
             _dbContext = new AppDbContext();
@@ -17,6 +17,15 @@ namespace entity_framework
             while (!quit)
             {
                 Console.Clear();
+
+                if(_activeClient != null)
+                {
+                    Console.WriteLine($"<<< Active Client: {_activeClient} >>>");
+                }
+                else
+                {
+                    Console.WriteLine("<<< No Active Client >>>");
+                }
 
                 Console.WriteLine("<<< Warehouse >>>");
                 Console.WriteLine("0. Show Items");
@@ -68,6 +77,7 @@ namespace entity_framework
                 Console.WriteLine($"\t{item}");
             }
 
+            Console.WriteLine("[INFO] Press Enter to Continue");
             Console.ReadLine();
         }
 
@@ -132,6 +142,8 @@ namespace entity_framework
                     if (index < 0 || index >= clients.Count)
                     {
                         Console.WriteLine("[ERROR] Invalid index, choose index between 0 and {0}", clients.Count - 1);
+                        Console.WriteLine("[INFO] Press Enter to Continue");
+                        Console.ReadLine();
                         continue;
                     }
                     return clients[index];
@@ -162,6 +174,8 @@ namespace entity_framework
                 if (item == null)
                 {
                     Console.WriteLine("[ERROR] Item with name {0} does not exist", itemName);
+                    Console.WriteLine("[INFO] Press Enter to Continue");
+                    Console.ReadLine();
                     return;
                 }
 
@@ -174,7 +188,6 @@ namespace entity_framework
                     Quantity = itemQuantity
                 };
                 order.OrderItems.Add(orderItem);
-                _dbContext.SaveChanges();
 
                 var input = "";
                 while(input != "y" && input != "n")
@@ -183,8 +196,10 @@ namespace entity_framework
                     input = Console.ReadLine();
                 }
                 
-                if (input == "n")
+                if (input == "y")
                 {
+                    _dbContext.Orders.Add(order);
+                    _dbContext.SaveChanges();
                     return;
                 }
             }

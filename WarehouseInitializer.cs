@@ -46,7 +46,7 @@ namespace entity_framework
                 context.SaveChanges();
             }
 
-            if (!context.Orders.Any())
+            /*if (!context.Orders.Any())
             {
                 var orderFaker = new Faker<Order>()
                     .RuleFor(o => o.Client, f => f.PickRandom(context.Clients.ToList()))
@@ -64,7 +64,7 @@ namespace entity_framework
                 context.Orders.AddRange(orders);
                 context.Orders.AddRange(eOrders);
                 context.SaveChanges();
-            }
+            }*/
         }
     }
 }

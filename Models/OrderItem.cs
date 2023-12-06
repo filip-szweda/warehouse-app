@@ -18,12 +18,7 @@ namespace entity_framework.Models
 
         public override string ToString()
         {
-            return $"Client: {Order.Client.Name}; Item: {Item.Name} ; Completed: {Order.Completed} ;Zam. el. {IsEOrder()} ;NoItems: {Order.AmountOfItems()}, Total: {Order.TotalPrice().ToString("0.00")}";
-        }
-
-        private bool IsEOrder()
-        {
-            return Order is EOrder;
+            return $"[Item]: {Item.Name}, [Quantity]: {Quantity}";
         }
     }
 }
