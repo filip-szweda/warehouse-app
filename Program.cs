@@ -1,4 +1,5 @@
 ﻿using entity_framework.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace entity_framework
 {
@@ -35,6 +36,7 @@ namespace entity_framework
                 Console.WriteLine("4. Choose Active Client");
                 Console.WriteLine("5. Add New Order");
                 Console.WriteLine("6. Show Orders");
+                Console.WriteLine("7. Show Clients who ordered selected Item");
 
                 var option = Console.ReadLine();
                 switch (option)
@@ -59,6 +61,9 @@ namespace entity_framework
                         break;
                     case "6":
                         ShowOrders();
+                        break;
+                    case "7":
+                        ShowClientWhoOrderedSelectedItem();
                         break;
                     default:
                         Console.WriteLine("[ERROR] Invalid option, choose option 0, 1, 2 or 3.");
@@ -162,6 +167,7 @@ namespace entity_framework
                 Client = _activeClient,
                 Completed = false
             };
+            _dbContext.Orders.Add(order);
 
             while (true)
             {
@@ -184,10 +190,12 @@ namespace entity_framework
 
                 var orderItem = new OrderItem
                 {
+                    Order = order,
                     Item = item,
                     Quantity = itemQuantity
                 };
                 order.OrderItems.Add(orderItem);
+                _dbContext.OrderItems.Add(orderItem);
 
                 var input = "";
                 while(input != "y" && input != "n")
@@ -285,6 +293,32 @@ namespace entity_framework
                     }
                 }
             }
+        }
+
+        private static void ShowClientWhoOrderedSelectedItem()
+        {
+            Console.Clear();
+
+            Console.WriteLine("[INFO] Enter Item name: ");
+            var itemName = Console.ReadLine();
+
+            var item = _dbContext.Items.FirstOrDefault(i => i.Name == itemName);
+            if (item == null)
+            {
+                Console.WriteLine("[ERROR] Item with name {0} does not exist", itemName);
+                Console.WriteLine("[INFO] Press Enter to Continue");
+                Console.ReadLine();
+                return;
+            }
+
+            var orders = _dbContext.Orders.Where(o => o.OrderItems.Any(oi => oi.ItemId == item.Id)).ToList();
+            foreach (var order in orders)
+            {
+                Console.WriteLine($"\t{order}");
+            }
+
+            Console.WriteLine("[INFO] Press Enter to Continue");
+            Console.ReadLine();
         }
 
         private static void AcceptOrder(Order order)
