@@ -32,11 +32,11 @@ namespace entity_framework
                 Console.WriteLine("0. Show Items");
                 Console.WriteLine("1. Add New Item");
                 Console.WriteLine("2. Increase Item Stock");
-                Console.WriteLine("3. Quit");
-                Console.WriteLine("4. Choose Active Client");
-                Console.WriteLine("5. Add New Order");
-                Console.WriteLine("6. Show Orders");
-                Console.WriteLine("7. Show Clients who ordered selected Item");
+                Console.WriteLine("3. Choose Active Client");
+                Console.WriteLine("4. Add New Order");
+                Console.WriteLine("5. Show Orders");
+                Console.WriteLine("6. Show Clients who ordered selected Item");
+                Console.WriteLine("7. Quit");
 
                 var option = Console.ReadLine();
                 switch (option)
@@ -51,22 +51,22 @@ namespace entity_framework
                         IncreaseItemStock();
                         break;
                     case "3":
-                        quit = true;
-                        break;
-                    case "4":
                         _activeClient = ChooseActiveClient();
                         break;
-                    case "5":
+                    case "4":
                         AddNewOrder();
                         break;
-                    case "6":
+                    case "5":
                         ShowOrders();
                         break;
-                    case "7":
+                    case "6":
                         ShowClientWhoOrderedSelectedItem();
                         break;
+                    case "7":
+                        quit = true;
+                        break;
                     default:
-                        Console.WriteLine("[ERROR] Invalid option, choose option 0, 1, 2 or 3.");
+                        Console.WriteLine("[ERROR] Invalid option, choose option from 0 to 7.");
                         break;
                 }
             }
@@ -194,7 +194,6 @@ namespace entity_framework
                     Quantity = itemQuantity
                 };
                 order.OrderItems.Add(orderItem);
-                // _dbContext.OrderItems.Add(orderItem);
 
                 var input = "";
                 while(input != "y" && input != "n")
@@ -250,7 +249,7 @@ namespace entity_framework
                 bool validInput = false;
                 while (!validInput)
                 {
-                    Console.WriteLine("[INFO] n - next page, p - previous page, q - quit, <index> - accept Order");
+                    Console.WriteLine("[INFO] n - next page, p - previous page, <index> - accept Order");
 
                     var input = Console.ReadLine();
                     if (int.TryParse(input, out var index))
@@ -286,7 +285,7 @@ namespace entity_framework
                         currentPage--;
                         validInput = true;
                     }
-                    else if (input == "q")
+                    else
                     {
                         return;
                     }
