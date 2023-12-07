@@ -333,13 +333,25 @@ namespace entity_framework
 
         private static void AcceptOrder(Order order)
         {
-            order.Completed = true;
-            foreach (var orderItem in order.OrderItems)
+            using var transaction = _dbContext.Database.BeginTransaction();
+
+            try
             {
-                orderItem.Item.Stock -= orderItem.Quantity;
+                order.Completed = true;
+                foreach (var orderItem in order.OrderItems)
+                {
+                    orderItem.Item.Stock -= orderItem.Quantity;
+                }
+                _dbContext.Orders.Update(order);
+                _dbContext.SaveChanges();
+
+                _dbContext.SaveChanges();
+                transaction.Commit();
             }
-            _dbContext.Orders.Update(order);
-            _dbContext.SaveChanges();
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
         }
     }
 }
