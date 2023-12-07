@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <None Update="warehouse.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

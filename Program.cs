@@ -215,7 +215,11 @@ namespace entity_framework
         {
             var currentPage = 0;
 
-            var orders = _dbContext.Orders.ToList();
+            var orders = _dbContext.Orders
+                .Include(o => o.Client)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Item)
+                .ToList();
             if (orders.Count == 0)
             {
                 Console.Clear();
