@@ -162,6 +162,15 @@ namespace entity_framework
 
         private static void AddNewOrder()
         {
+            if (_activeClient == null)
+            {
+                Console.Clear();
+                Console.WriteLine($"[ERROR] No Active Client");
+                Console.WriteLine("[INFO] Press Enter to Continue");
+                Console.ReadLine();
+                return;
+            }
+
             var order = new Order
             {
                 Client = _activeClient,
@@ -334,18 +343,22 @@ namespace entity_framework
         private static void AcceptOrder(Order order)
         {
             using var transaction = _dbContext.Database.BeginTransaction();
-
             try
             {
-                order.Completed = true;
                 foreach (var orderItem in order.OrderItems)
                 {
+                    if(orderItem.Item.Stock < orderItem.Quantity)
+                    {
+                        throw (new Exception($"Not enough stock of {orderItem.Item.Name} to complete order"));
+                    }
                     orderItem.Item.Stock -= orderItem.Quantity;
                 }
+
+                order.Completed = true;
+
                 _dbContext.Orders.Update(order);
                 _dbContext.SaveChanges();
 
-                _dbContext.SaveChanges();
                 transaction.Commit();
             }
             catch (Exception)

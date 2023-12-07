@@ -18,7 +18,6 @@ namespace entity_framework.Models
         public void AddNewItem(Item item)
         {
             using var transaction = _dbContext.Database.BeginTransaction();
-
             try
             {
                 var existingItem = _dbContext.Items.FirstOrDefault(i => i.Name == item.Name);
@@ -33,6 +32,7 @@ namespace entity_framework.Models
                 }
 
                 _dbContext.SaveChanges();
+
                 transaction.Commit();
             }
             catch (Exception)
