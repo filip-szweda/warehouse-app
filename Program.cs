@@ -253,7 +253,7 @@ namespace entity_framework
                 bool validInput = false;
                 while (!validInput)
                 {
-                    Console.WriteLine("[INFO] n - next page, p - previous page, <index> - accept Order");
+                    Console.WriteLine("[INFO] Press Enter to Continue / n - next page / p - previous page / <index> - accept Order ");
 
                     var input = Console.ReadLine();
                     if (int.TryParse(input, out var index))
@@ -313,11 +313,18 @@ namespace entity_framework
                 return;
             }
 
-            var orders = _dbContext.Orders.Where(o => o.OrderItems.Any(oi => oi.ItemId == item.Id)).ToList();
-            var clientNames = orders.Select(o => o.Client.Name).Distinct().ToList();
-            foreach (var clientName in clientNames)
+            var orders = _dbContext.Orders
+                .Where(o => o.OrderItems
+                .Any(oi => oi.ItemId == item.Id))
+                .Include(o => o.Client)
+                .ToList();
+            var clients = orders
+                .Select(o => o.Client)
+                .Distinct()
+                .ToList();
+            foreach (var client in clients)
             {
-                Console.WriteLine($"\t{clientName}");
+                Console.WriteLine($"\t{client}");
             }
 
             Console.WriteLine("[INFO] Press Enter to Continue");
@@ -327,6 +334,11 @@ namespace entity_framework
         private static void AcceptOrder(Order order)
         {
             order.Completed = true;
+            foreach (var orderItem in order.OrderItems)
+            {
+                orderItem.Item.Stock -= orderItem.Quantity;
+            }
+            _dbContext.Orders.Update(order);
             _dbContext.SaveChanges();
         }
     }
